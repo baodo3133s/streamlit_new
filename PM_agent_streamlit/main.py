@@ -36,7 +36,7 @@ llm = ChatOpenAI(
 # 2. PDF Loader + Vector Store Builder
 # ============================================================
 
-PDF_FOLDER = "pdfs"
+PDF_FOLDER = "PM_agent_streamlit/pdfs"
 
 
 def load_all_pdfs(folder_path: str):
