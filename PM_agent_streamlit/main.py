@@ -154,52 +154,5 @@ def run_agent(user_input: str, history: List[BaseMessage]) -> AIMessage:
             content=f"Error: {str(e)}\n\nCheck your PDFs or try rephrasing."
         )
 
-# ============================================================
-# 6. Text‑to‑Speech (OpenAI)
-# ============================================================
 
-def text_to_speech(text: str, filename: str = "agent_output.mp3") -> str:
-    """
-    Convert text to speech using OpenAI TTS and save as an MP3 file.
-    Returns the file path.
-    """
-    response = client.audio.speech.create(
-        model="gpt-4o-mini-tts",
-        voice="alloy",
-        input=text
-    )
-
-    with open(filename, "wb") as f:
-        f.write(response.read())
-
-    return filename
-
-
-# ============================================================
-# 7. Agent Runner (returns text + audio)
-# ============================================================
-
-def run_agent(user_input: str, history: List[BaseMessage]):
-    """
-    Run a single turn of the agent and generate TTS audio.
-    Returns: (AIMessage, audio_file_path)
-    """
-    try:
-        result = agent.invoke(
-            {"messages": history + [HumanMessage(content=user_input)]},
-            config={"recursion_limit": 50}
-        )
-        ai_msg = result["messages"][-1]
-
-        # Generate TTS audio
-        audio_path = text_to_speech(ai_msg.content)
-
-        return ai_msg, audio_path
-
-    except Exception as e:
-        error_msg = AIMessage(
-            content=f"Error: {str(e)}\n\nCheck your PDFs or try rephrasing."
-        )
-        audio_path = text_to_speech(error_msg.content)
-        return error_msg, audio_path
 
